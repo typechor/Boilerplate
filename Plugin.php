@@ -59,14 +59,68 @@ class MyPlugin_Plugin implements Typecho_Plugin_Interface
     public static function config(Typecho_Widget_Helper_Form $form)
     {
 
-        $text = new Typecho_Widget_Helper_Form_Element_Text('text', NULL, '默认值', _t('文本输入框'));
-        $textarea = new Typecho_Widget_Helper_Form_Element_Textarea('textarea', NULL, '默认值', _t('多行文本输入框'));
-        $password = new Typecho_Widget_Helper_Form_Element_Password('password', NULL, NULL, _t('密码输入框'));
-        $radio = new Typecho_Widget_Helper_Form_Element_Radio('radio', array('选项值' => _t('选项说明')), '默认值', _t('单选框'));
-        $checkbox = new Typecho_Widget_Helper_Form_Element_Checkbox('checkbox', array('选项值' => _t('选项说明')), '默认值', _t('多选框'));
-        $select = new Typecho_Widget_Helper_Form_Element_Select('select', array('选项值' => _t('选项说明')), '默认值', _t('下拉选择框'));
+        $text = new Typecho_Widget_Helper_Form_Element_Text(
+            'text',
+            NULL,
+            '默认值',
+            _t('文本输入框')
+        );
 
-        $form->addInput('配置名');
+        $textarea = new Typecho_Widget_Helper_Form_Element_Textarea(
+            'textarea',
+            NULL,
+            '默认值',
+            _t('多行文本输入框')
+        );
+
+        $password = new Typecho_Widget_Helper_Form_Element_Password(
+            'password',
+            NULL,
+            NULL,
+            _t('密码输入框')
+        );
+
+        $radio = new Typecho_Widget_Helper_Form_Element_Radio(
+            'radio',
+            array(
+                '选项值1' => _t('选项1说明'),
+                '选项值2' => _t('选项2说明')
+            ),
+            '默认值',
+            _t('单选框')
+        );
+
+        $checkbox = new Typecho_Widget_Helper_Form_Element_Checkbox(
+            'checkbox',
+            array(
+                '选项值1' => _t('选项1说明'),
+                '选项值2' => _t('选项2说明')
+            ),
+            '默认值',
+            _t('多选框')
+        );
+
+        $select = new Typecho_Widget_Helper_Form_Element_Select(
+            'select',
+            array(
+                '选项值1' => _t('选项1说明'),
+                '选项值2' => _t('选项2说明')
+            ),
+            '默认值',
+            _t('下拉选择框')
+        );
+
+        /* 添加表单验证规则 */
+        $text->addRule('isInteger', _t('text必须是纯数字'));
+        // $form->addInput($text->addRule('isInteger', _t('text必须是纯数字')));
+        $password->addRule('required', _t('密码不可为空'));
+
+        $form->addInput($text);
+        $form->addInput($textarea);
+        $form->addInput($password);
+        $form->addInput($radio);
+        $form->addInput($checkbox);
+        $form->addInput($select);
     }
 
     /**
@@ -86,6 +140,6 @@ class MyPlugin_Plugin implements Typecho_Plugin_Interface
      */
     public static function doSomething()
     {
-        // 实现代码
+        // 接口实现代码
     }
 }
