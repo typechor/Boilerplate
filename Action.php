@@ -1,5 +1,13 @@
 <?php
+if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 
+/**
+ * 动作
+ *
+ * @package MyPlugin
+ * @copyright Copyright (c) 2008 作者 (主页)
+ * @license GNU General Public License 2.0
+ */
 class MyPlugin_Action extends Typecho_Widget implements Widget_Interface_Do
 {
     /**
