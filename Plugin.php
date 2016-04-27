@@ -20,18 +20,23 @@ class MyPlugin_Plugin implements Typecho_Plugin_Interface
      */
     public static function activate()
     {
-        // 版本支持检测
-        // if (false == Typecho_Plugin::checkDependence(Typecho_Common::VERSION, '最小版本-最大版本')) {
-        //     throw new Typecho_Plugin_Exception(_t('对不起, 您的程序版本不支持这个插件！'));
-        // }
-
         // 接口
-        Typecho_Plugin::factory('接口')->navBar_20 = array('MyPlugin_Plugin', '实现方法');
+        Typecho_Plugin::factory('接口')->navBar_20 = array('MyPlugin_Plugin', 'functionName');
 
-        Helper::addMenu('菜单名');
-        Helper::addPanel('菜单索引', '文件名称', '面板标题', '面板副标题', '进入权限');
-        Helper::addAction('动作名称', '动作类名');
-        Helper::addRoute('路由名称', '路由路径 = /url/[path]', '组件名称', '组件动作 = NULL');
+        // 添加菜单
+        Helper::addMenu('menuName');
+
+        // 添加面板, 1 为菜单索引位置, administrator 为进入面板的权限
+        Helper::addPanel(1, 'MyPlugin/panel.php', 'panelTitle', 'panelSubtitle', 'administrator');
+
+        // 添加动作
+        Helper::addAction('actionName', 'MyPlugin_ActionClassName');
+
+        // 添加路由
+        Helper::addRoute('routeName', '/myroute/route-path', 'MyPlugin_WidgetClassName', 'functionName');
+
+        // 激活时返回的信息
+        return _t('激活时返回的信息');
     }
 
     /**
@@ -43,10 +48,10 @@ class MyPlugin_Plugin implements Typecho_Plugin_Interface
      */
     public static function deactivate()
     {
-        Helper::removeRoute('路由名称');
-        Helper::removeAction('动作名称');
-        Helper::removePanel('菜单索引', '文件名称');
-        Helper::removeMenu('菜单名');
+        Helper::removeRoute('routeName');
+        Helper::removeAction('actionName');
+        Helper::removePanel(1, 'MyPlugin/panel.php');
+        Helper::removeMenu('menuName');
     }
 
     /**
@@ -58,62 +63,44 @@ class MyPlugin_Plugin implements Typecho_Plugin_Interface
      */
     public static function config(Typecho_Widget_Helper_Form $form)
     {
+        // 文本输入框
+        $text = new Typecho_Widget_Helper_Form_Element_Text('text', NULL, '默认值', _t('标题'), _t('提示文字'));
 
-        $text = new Typecho_Widget_Helper_Form_Element_Text(
-            'text',
-            NULL,
-            '默认值',
-            _t('文本输入框')
-        );
+        // 多行文本输入框
+        $textarea = new Typecho_Widget_Helper_Form_Element_Textarea('textarea', NULL, '默认值', _t('标题'), _t('提示文字'));
 
-        $textarea = new Typecho_Widget_Helper_Form_Element_Textarea(
-            'textarea',
-            NULL,
-            '默认值',
-            _t('多行文本输入框')
-        );
+        // 密码输入框
+        $password = new Typecho_Widget_Helper_Form_Element_Password('password', NULL, NULL, _t('标题'), _t('提示文字'));
 
-        $password = new Typecho_Widget_Helper_Form_Element_Password(
-            'password',
-            NULL,
-            NULL,
-            _t('密码输入框')
-        );
+        // 单选框
+        $radio = new Typecho_Widget_Helper_Form_Element_Radio('radio',array(
+            '选项值1' => _t('选项1说明'),
+            '选项值2' => _t('选项2说明')),
+        '默认值', _t('标题'), _t('提示文字'));
 
-        $radio = new Typecho_Widget_Helper_Form_Element_Radio(
-            'radio',
-            array(
-                '选项值1' => _t('选项1说明'),
-                '选项值2' => _t('选项2说明')
-            ),
-            '默认值',
-            _t('单选框')
-        );
+        // 多选框
+        $checkbox = new Typecho_Widget_Helper_Form_Element_Checkbox('checkbox',array(
+            '选项值1' => _t('选项1说明'),
+            '选项值2' => _t('选项2说明')),
+        '默认值', _t('标题'), _t('提示文字'));
 
-        $checkbox = new Typecho_Widget_Helper_Form_Element_Checkbox(
-            'checkbox',
-            array(
-                '选项值1' => _t('选项1说明'),
-                '选项值2' => _t('选项2说明')
-            ),
-            '默认值',
-            _t('多选框')
-        );
-
-        $select = new Typecho_Widget_Helper_Form_Element_Select(
-            'select',
-            array(
-                '选项值1' => _t('选项1说明'),
-                '选项值2' => _t('选项2说明')
-            ),
-            '默认值',
-            _t('下拉选择框')
-        );
+        // 下拉选择框
+        $select = new Typecho_Widget_Helper_Form_Element_Select('select',array(
+            '选项值1' => _t('选项1说明'),
+            '选项值2' => _t('选项2说明')),
+        '默认值', _t('标题'), _t('提示文字'));
 
         /* 添加表单验证规则 */
-        $text->addRule('isInteger', _t('text必须是纯数字'));
+        // $text->addRule('isInteger', _t('text必须是纯数字'));
         // $form->addInput($text->addRule('isInteger', _t('text必须是纯数字')));
-        $password->addRule('required', _t('密码不可为空'));
+        // $element->addRule('xssCheck', _t('请不要使用特殊字符'));
+        // $password->addRule('required', _t('密码不可为空'));
+        // $password->addRule('minLength', _t('为了保证账户安全, 请输入至少六位的密码'), 6);
+        // $confirm->addRule('confirm', _t('两次输入的密码不一致'), 'password');
+        // $url->addRule('url', _t('个人主页地址格式错误'));
+        // $mail->addRule('required', _t('必须填写电子邮箱'));
+        // $mail->addRule(array($this, 'mailExists'), _t('电子邮箱地址已经存在'));
+        // $mail->addRule('email', _t('电子邮箱格式错误'));
 
         $form->addInput($text);
         $form->addInput($textarea);
