@@ -1,92 +1,98 @@
 <?php
-if (!defined('__TYPECHO_ROOT_DIR__')) exit;
+
+namespace TypechoPlugin\Boilerplate;
+
+use Typecho\Plugin\PluginInterface;
+use Typecho\Widget\Helper\Form;
+use Widget\Options;
+// use Widget\Base\Contents;
+use Utils\Helper;
+
+if (!defined('__TYPECHO_ROOT_DIR__')) {
+    exit;
+}
 
 /**
- * typecho 插件制作样板
+ * Boilerplate
+ * 插件样板
  *
- * @package MyPlugin
- * @author authorName
- * @version 1.0.0
- * @link http://typecho.org
- * @dependence 14.5.26-*
+ * @package Boilerplate
+ * @author shingchi
+ * @version 2.0.0
+ * @link https://github.com/shingchi
  */
-class MyPlugin_Plugin implements Typecho_Plugin_Interface
+class Plugin implements PluginInterface
 {
     /**
      * 激活插件方法,如果激活失败,直接抛出异常
-     *
-     * @access public
-     * @return void
-     * @throws Typecho_Plugin_Exception
      */
     public static function activate()
     {
-        // 接口
-        Typecho_Plugin::factory('接口')->navBar_20 = array('MyPlugin_Plugin', 'functionName');
+        // 插件接口
+        // \Typecho\Plugin::factory('admin/menu.php')->navBar = __CLASS__ . '::render';
+        // Contents::pluginHandle()->contentEx = __CLASS__ . '::parse';
 
         // 添加菜单
-        Helper::addMenu('menuName');
+        // Helper::addMenu('boilerplateMenu');
 
         // 添加面板, 1 为菜单索引位置, administrator 为进入面板的权限
-        Helper::addPanel(1, 'MyPlugin/panel.php', 'panelTitle', 'panelSubtitle', 'administrator');
+        // Helper::addPanel(1, 'Boilerplate/panel.php', 'panelTitle', 'panelSubtitle', 'administrator');
 
         // 添加动作
-        Helper::addAction('actionName', 'MyPlugin_ActionClassName');
+        // Helper::addAction('boilerplateAction', ActionClassName::class);
+        // Helper::addAction('boilerplateAction', Action::class);
 
         // 添加路由
-        Helper::addRoute('routeName', '/myroute/route-path', 'MyPlugin_WidgetClassName', 'functionName');
-
-        // 激活时返回的信息
-        return _t('激活时返回的信息');
+        // 默认先执行 execute 方法，再执行自定义方法
+        // Helper::addRoute('boilerplateRoute', '/boilerplate/widget-path', WidgetClassName::class);
+        // Helper::addRoute('boilerplateRoute', '/boilerplate/widget-path', Widget::class, 'doSomething');
     }
 
     /**
      * 禁用插件方法,如果禁用失败,直接抛出异常
-     *
-     * @access public
-     * @return void
-     * @throws Typecho_Plugin_Exception
      */
     public static function deactivate()
     {
-        Helper::removeRoute('routeName');
-        Helper::removeAction('actionName');
-        Helper::removePanel(1, 'MyPlugin/panel.php');
-        Helper::removeMenu('menuName');
+        // Helper::removeRoute('boilerplateRoute');
+        // Helper::removeAction('boilerplateAction');
+        // Helper::removePanel(1, 'Boilerplate/panel.php');
+        // Helper::removeMenu('boilerplateMenu');
     }
 
     /**
      * 获取插件配置面板
      *
-     * @access public
-     * @param Typecho_Widget_Helper_Form $form 配置面板
-     * @return void
+     * @param Form $form 配置面板
      */
-    public static function config(Typecho_Widget_Helper_Form $form)
+    public static function config(Form $form)
     {
+        // use Typecho\Widget\Helper\Form\Element\Text 可直接用 Text
+        // $name = new Text('word', null, 'Hello World', _t('说点什么'));
+        // $form->addInput($name);
+        
         // 文本输入框
-        $text = new Typecho_Widget_Helper_Form_Element_Text('text', NULL, '默认值', _t('标题'), _t('提示文字'));
+        $text = new Form\Element\Text('text', NULL, '默认值', _t('标题'), _t('提示文字'));
 
         // 多行文本输入框
-        $textarea = new Typecho_Widget_Helper_Form_Element_Textarea('textarea', NULL, '默认值', _t('标题'), _t('提示文字'));
+        $textarea = new Form\Element\Textarea('textarea', NULL, '默认值', _t('标题'), _t('提示文字'));
 
         // 密码输入框
-        $password = new Typecho_Widget_Helper_Form_Element_Password('password', NULL, NULL, _t('标题'), _t('提示文字'));
+        $password = new Form\Element\Password('password', NULL, NULL, _t('标题'), _t('提示文字'));
 
         // 单选框
-        $radio = new Typecho_Widget_Helper_Form_Element_Radio('radio',array(
+        $radio = new Form\Element\Radio('radio',array(
             '选项值1' => _t('选项1说明'),
             '选项值2' => _t('选项2说明')),
         '默认值', _t('标题'), _t('提示文字'));
 
         // 多选框
-        $checkbox = new Typecho_Widget_Helper_Form_Element_Checkbox('checkbox',array(
+        $checkbox = new Form\Element\Checkbox('checkbox',array(
             '选项值1' => _t('选项1说明'),
             '选项值2' => _t('选项2说明')),
         '默认值', _t('标题'), _t('提示文字'));
 
         // 下拉选择框
-        $select = new Typecho_Widget_Helper_Form_Element_Select('select',array(
+        $select = new Form\Element\Select('select',array(
             '选项值1' => _t('选项1说明'),
             '选项值2' => _t('选项2说明')),
         '默认值', _t('标题'), _t('提示文字'));
@@ -114,11 +120,11 @@ class MyPlugin_Plugin implements Typecho_Plugin_Interface
     /**
      * 个人用户的配置面板
      *
-     * @access public
-     * @param Typecho_Widget_Helper_Form $form
-     * @return void
+     * @param Form $form
      */
-    public static function personalConfig(Typecho_Widget_Helper_Form $form){}
+    public static function personalConfig(Form $form)
+    {
+    }
 
     /**
      * 插件实现方法
@@ -126,8 +132,8 @@ class MyPlugin_Plugin implements Typecho_Plugin_Interface
      * @access public
      * @return void
      */
-    public static function doSomething()
+    public static function render()
     {
-        // 接口实现代码
+        echo '<span class="message success">HelloWorld!</span>';
     }
 }
